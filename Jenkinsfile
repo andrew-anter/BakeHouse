@@ -11,7 +11,7 @@ pipeline {
                 echo "${BRANCH_NAME}"
 
                 script{
-                    if( ${BRANCH_NAME} == "master" ){
+                    if( params.BRANCH_NAME == "master" ){
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''    
                             docker login -u ${USERNAME} -p ${PASSWORD}
@@ -31,7 +31,7 @@ pipeline {
 
                 script{
 
-                    if( ${BRANCH_NAME} == "master" ){
+                    if( params.BRANCH_NAME == "master" ){
                         withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG')]) {
                         sh '''
                             export BUILD_NUMBER=${cat ../build.txt}
