@@ -8,6 +8,7 @@ pipeline {
         stage('build') {
             steps {
                 echo 'building...'
+                echo "${BRANCH_NAME}"
 
                 script{
                     if( ${BRANCH_NAME} == "master" ){
