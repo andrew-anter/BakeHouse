@@ -17,7 +17,7 @@ pipeline {
                     sh '''    
                         docker login -u ${USERNAME} -p ${PASSWORD}
                         docker build . -t andrewanter/bakehouse:${BUILD_NUMBER}
-                        docker push andrewanter/bakehouse:${BUILD_NUMBER}
+                        docker push andrewanter/bakehouse:v${BUILD_NUMBER}
                     '''
                     }
                 }
@@ -34,7 +34,7 @@ pipeline {
                         cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
                         rm -f Deployment/deploy.yaml.tmp
                         kubectl apply -f Deployment --kubeconfig ${KUBECONFIG}
-
+                        
                     '''
                     }
                 }   
