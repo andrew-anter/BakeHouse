@@ -5,24 +5,26 @@ pipeline {
         }
     }
     stages {
-        stage('build') {
-            steps {
-                echo 'building...'
-                echo "${BRANCH_NAME}"
+        if( env.BRANCH_NAME == "release" ){
+            stage('build') {
+                steps {
+                    echo 'building...'
+                    echo "${BRANCH_NAME}"
 
-                script{
-                    if( env.BRANCH_NAME == "release" ){
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh '''    
-                            docker login -u ${USERNAME} -p ${PASSWORD}
-                            docker build . -t andrewanter/bakehouse:v${BUILD_NUMBER}
-                            docker push andrewanter/bakehouse:v${BUILD_NUMBER}
-                            echo ${BUILD_NUMBER} > ../build.txt
-                        '''
+                    script{
+                        if( env.BRANCH_NAME == "release" ){
+                            withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                            sh '''    
+                                docker login -u ${USERNAME} -p ${PASSWORD}
+                                docker build . -t andrewanter/bakehouse:v${BUILD_NUMBER}
+                                docker push andrewanter/bakehouse:v${BUILD_NUMBER}
+                                echo ${BUILD_NUMBER} > ../build.txt
+                            '''
+                            }
                         }
                     }
+                    
                 }
-                
             }
         }
         stage('deploy') {
